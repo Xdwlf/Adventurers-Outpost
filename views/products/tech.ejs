@@ -1,4 +1,5 @@
-<h2>ALL PRODUCTS </h2>
+<% include ../partials/header %>
+<h2>This is the TECH PAGE </h2>
 
 <a href="/">Go Home</a>
 <% products.forEach(function(product){ %>
@@ -7,3 +8,4 @@
     <p> <%= product.description %> </p>
 
 <% }) %>
+<% include ../partials/footer %>

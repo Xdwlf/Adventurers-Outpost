@@ -18,7 +18,7 @@ var data =[{
 },
 {
   name: "Bottled Unicorn Dreams",
-  category: "consumables",
+  category: "consumable",
   image: "/images/bottledunicorndreams.jpg",
   description: "Carefully extracted from northwestern wild unicorns. Sustainable harvested.",
   inventory: 12
@@ -36,7 +36,7 @@ var data =[{
   image: "/images/buttcoolingcupholder.jpg",
   description: "The coolest holder for your buttocks.",
   inventory: 5
-}
+},
 ]
 
 function seedDB(){

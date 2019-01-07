@@ -8,13 +8,19 @@ router.get("/", function(req,res){
     if(err){
       console.log(err);
     } else{
-      res.render("products",{products: allProducts});
+      res.render("products/products",{products: allProducts});
     }
   })
 })
 
 router.get("/clothing", function(req,res){
-  res.render("clothing");
+  Product.find({category: "clothing"}, function(err,allClothing){
+    if(err){
+      console.log(err);
+    } else{
+      res.render("products/clothing",{products: allClothing});
+    }
+  })
 })
 
 router.get("/tech", function(req,res){
@@ -22,13 +28,37 @@ router.get("/tech", function(req,res){
     if(err){
       console.log(err);
     } else{
-      res.render("tech",{products: allTech});
+      res.render("products/tech",{products: allTech});
     }
   })
 })
 
 router.get("/consumables", function(req,res){
-  res.render("consumables");
+  Product.find({category: "consumable"}, function(err,allConsumables){
+    if(err){
+      console.log(err);
+    } else{
+      res.render("products/consumables",{products: allConsumables});
+    }
+  })
 });
+
+//ROUTES TO ADD NEW PRODUCT TO CATALOG
+
+//RENDERS FORM FOR NEW Product
+router.get("/new", function(req,res){
+  res.render("products/new");
+});
+
+router.post("/",function(req,res){
+  var newProduct = req.body.product;
+  Product.create(newProduct, function(err, newlyCreatedProduct){
+    if(err){
+      console.log(err);
+    } else{
+      res.redirect("/products");
+    }
+  })
+})
 
 module.exports= router;

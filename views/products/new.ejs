@@ -1,0 +1,17 @@
+<% include ../partials/header %>
+<h1>CREATE A NEW PRODUCT</h1>
+
+<form method="POST" action="/products">
+    <input type="text" placeholder="Name" name="product[name]" required>
+    <select name="product[category]" required>
+      <option value="clothing">Clothing</option>
+      <option value="tech">Tech</option>
+      <option value="consumable">Consumable</option>
+    </select>
+    <input type="text" placeholder="Image Name" name="product[image]" required>
+    <input type="number" name="product[price]" min="1" step="0.1" placeholder="Price" required>
+    <input type="number" name="product[inventory]" min="0" step="1" placeholder="Inventory" required>
+    <textarea name="product[description]" rows="5" cols="50" required></textarea>
+    <button>Submit</button>
+</form>
+<% include ../partials/footer %>
