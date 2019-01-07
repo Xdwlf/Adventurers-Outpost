@@ -1,4 +1,10 @@
 <% include ../partials/header %>
 <h1>THIS IS THE CONSUMABLES PAGE </h1>
 <a href="/">Go Home</a>
+<% products.forEach(function(product){ %>
+    <h4> <%= product.name %> </h4>
+    <img src="<%=product.image%>">
+    <p> <%= product.description %> </p>
+
+<% }) %>
 <% include ../partials/footer %>
