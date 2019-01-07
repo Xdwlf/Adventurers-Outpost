@@ -1,0 +1,9 @@
+<h2>This is the TECH PAGE </h2>
+
+<a href="/">Go Home</a>
+<% products.forEach(function(product){ %>
+    <h4> <%= product.name %> </h4>
+    <img src="<%=product.image%>">
+    <p> <%= product.description %> </p>
+
+<% }) %>

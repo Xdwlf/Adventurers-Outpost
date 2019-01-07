@@ -1,0 +1,9 @@
+<h2>ALL PRODUCTS </h2>
+
+<a href="/">Go Home</a>
+<% products.forEach(function(product){ %>
+    <h4> <%= product.name %> </h4>
+    <img src="<%=product.image%>">
+    <p> <%= product.description %> </p>
+
+<% }) %>
