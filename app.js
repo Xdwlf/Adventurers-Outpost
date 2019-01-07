@@ -6,6 +6,8 @@ var   express = require("express"),
       seedDB = require("./seed"),
       app     = express();
 
+var productRoutes = require("./routes/products")
+
 mongoose.connect("mongodb://localhost/sample_shop");
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended:true}));
@@ -17,33 +19,8 @@ app.get("/", function(req,res){
   res.render("home");
 });
 
-app.get("/products", function(req,res){
-  Product.find({}, function(err,allProducts){
-    if(err){
-      console.log(err);
-    } else{
-      res.render("products",{products: allProducts});
-    }
-  })
-})
+app.use("/products", productRoutes);
 
-app.get("/products/clothing", function(req,res){
-  res.render("clothing");
-})
-
-app.get("/products/tech", function(req,res){
-  Product.find({category: "tech"}, function(err,allTech){
-    if(err){
-      console.log(err);
-    } else{
-      res.render("tech",{products: allTech});
-    }
-  })
-})
-
-app.get("/products/consumables", function(req,res){
-  res.render("consumables");
-})
 
 
 app.listen(process.env.PORT || 3000, function(){
