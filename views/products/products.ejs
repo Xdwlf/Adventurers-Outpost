@@ -6,6 +6,7 @@
     <h4> <%= product.name %> </h4>
     <img src="<%=product.image%>">
     <p> <%= product.description %> </p>
+    <a href="/products/<%=product._id%>">More Info</a>
 
 <% }) %>
 <% include ../partials/footer %>

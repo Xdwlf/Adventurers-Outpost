@@ -50,6 +50,7 @@ router.get("/new", function(req,res){
   res.render("products/new");
 });
 
+//posts new product to database
 router.post("/",function(req,res){
   var newProduct = req.body.product;
   Product.create(newProduct, function(err, newlyCreatedProduct){
@@ -57,6 +58,18 @@ router.post("/",function(req,res){
       console.log(err);
     } else{
       res.redirect("/products");
+    }
+  })
+})
+
+//Product show page
+router.get("/:id",function(req,res){
+  Product.findById(req.params.id, function(err, foundProduct){
+    if(err){
+      console.log(err);
+      res.redirect("/products")
+    } else{
+      res.render("products/show",{product: foundProduct});
     }
   })
 })
