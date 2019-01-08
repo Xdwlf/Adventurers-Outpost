@@ -1,41 +1,43 @@
 <% include ../partials/header %>
 <h1>CREATE A NEW PRODUCT</h1>
-<div class="ui main container equal width form">
-  <form method="POST" action="/products" class="ui form">
-    <div class="fields">
-      <div class="field">
-        <label>Product Name</label>
-        <input type="text" placeholder="Name" name="product[name]" required>
+<div class="ui container">
+  <div class="ui main container equal width form">
+    <form method="POST" action="/products" class="ui form">
+      <div class="fields">
+        <div class="field">
+          <label>Product Name</label>
+          <input type="text" placeholder="Name" name="product[name]" required>
+        </div>
+        <div class="field">
+          <label>Category</label>
+          <select name="product[category]" required>
+            <option value="clothing">Clothing</option>
+            <option value="tech">Tech</option>
+            <option value="consumable">Consumable</option>
+          </select>
+        </div>
       </div>
-      <div class="field">
-        <label>Category</label>
-        <select name="product[category]" required>
-          <option value="clothing">Clothing</option>
-          <option value="tech">Tech</option>
-          <option value="consumable">Consumable</option>
-        </select>
+      <div class="fields">
+        <div class="field">
+          <label>Price</label>
+          <input type="number" name="product[price]" min="1" step="0.1" placeholder="Price" required>
+        </div>
+        <div class="field">
+          <label>Inventory</label>
+          <input type="number" name="product[inventory]" min="0" step="1" placeholder="Inventory" required>
+        </div>
       </div>
-    </div>
-    <div class="fields">
-      <div class="field">
-        <label>Price</label>
-        <input type="number" name="product[price]" min="1" step="0.1" placeholder="Price" required>
-      </div>
-      <div class="field">
-        <label>Inventory</label>
-        <input type="number" name="product[inventory]" min="0" step="1" placeholder="Inventory" required>
-      </div>
-    </div>
-      <div class="field">
-        <label>Image URL</label>
-        <input type="text" placeholder="Image Name" name="product[image]" required>
-      </div>
-      <div class="field">
-        <label>Description</label>
-        <textarea name="product[description]" rows="5" cols="50" required></textarea>
-      </div>
-      <button class="ui fluid teal button">Submit</button>
-  </form>
+        <div class="field">
+          <label>Image URL</label>
+          <input type="text" placeholder="Image Name" name="product[image]" required>
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <textarea name="product[description]" rows="5" cols="50" required></textarea>
+        </div>
+        <button class="ui fluid teal button">Submit</button>
+    </form>
+  </div>
 </div>
 
 <% include ../partials/footer %>

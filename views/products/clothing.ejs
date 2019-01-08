@@ -1,11 +1,40 @@
 <% include ../partials/header %>
-<h1>This is the Clothing Show Page</h1>
+<h2 class="ui big header">Clothing </h2>
 
-<a href="/">Go Home</a>
-<% products.forEach(function(product){ %>
-    <h4> <%= product.name %> </h4>
-    <img src="<%=product.image%>">
-    <p> <%= product.description %> </p>
+<div class="ui container">
+  <div class="ui grid">
+    <% products.forEach(function(product){ %>
+      <div class="four wide column">
+        <div class="ui special cards">
+          <div class="ui fluid card">
+            <div class="blurring dimmable image">
+              <div class="ui dimmer">
+                <div class="content">
+                  <div class="center">
+                    <a class="ui button inverted" href="/products/<%=product._id %>"> More Info </a>
+                  </div>
+                </div>
+              </div>
+              <img src="<%=product.image%>">
+            </div>
+            <div class="content">
+              <div class="header">
+                <h4> <%= product.name %> </h4>
+              </div>
+              <div class="meta">
+                <p> $ <%= product.price %> </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
 
-<% }) %>
+<script type="text/javascript">
+    $('.special.cards .image').dimmer({
+    on: 'hover'
+  });
+</script>
 <% include ../partials/footer %>
