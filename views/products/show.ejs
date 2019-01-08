@@ -1,14 +1,24 @@
 <% include ../partials/header %>
 
 <h1> PRODUCT SHOW PAGE </h1>
-<div class="ui container">
-  <div class="ui card">
-    <div class="image">
-      <img src="<%=product.image%>">
-    </div>
-    <%= product.name %>
+    <div class="ui grid container stackable">
+      <div class="eight wide column">
+        <div class="ui huge image">
+          <img src="<%=product.image%>">
+        </div>
+      </div>
+      <div class="eight wide column">
+        <div class="content">
+          <h2 class="ui header">
+            <%= product.name %>
+          </h2>
+          <div class="description">
+            <%= product.description %>
+          </div>
+          <button type="button" class="ui large green button">Add to Cart</button>
 
-  </div>
-</div>
+        </div>
+      </div>
+    </div>
 
 <% include ../partials/footer %>
