@@ -64,7 +64,7 @@ router.post("/",function(req,res){
 
 //Product show page
 router.get("/:id",function(req,res){
-  Product.findById(req.params.id, function(err, foundProduct){
+  Product.findById(req.params.id).populate("reviews").exec(function(err, foundProduct){
     if(err){
       console.log(err);
       res.redirect("/products")

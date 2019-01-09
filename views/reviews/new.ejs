@@ -1,0 +1,27 @@
+<% include ../partials/header %>
+<h1>Add a New Review</h1>
+<div class="ui container">
+  <div class="ui main container equal width form">
+    <form method="POST" action="/products/<%=product_id%>/reviews" class="ui form">
+        <div class="field">
+          <label>Title</label>
+          <input type="text" name="review[title]" placeholder="Title" required>
+        </div>
+        <div class="field">
+          <label>Rating</label>
+          <input type="number" name="review[rating]" min="1" step="0.5" max="5" placeholder="Rating" required>
+        </div>
+        <div class="field">
+          <label>Author</label>
+          <input type="text" name="review[author]" placeholder="Author" required>
+        </div>
+        <div class="field">
+          <label>Review</label>
+          <textarea name="review[text]" rows="5" cols="50" required></textarea>
+        </div>
+        <button class="ui fluid teal button">Submit</button>
+    </form>
+  </div>
+</div>
+
+<% include ../partials/footer %>

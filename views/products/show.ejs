@@ -21,4 +21,37 @@
       </div>
     </div>
 
+
+
+<div class="ui container">
+  <h4>Reviews<h4>
+  <a class="ui pink button" href="/products/<%= product._id %>/reviews/new">Review this Product</a>
+  <div class="ui items segment">
+    <% if(product.reviews){
+      product.reviews.forEach(function(review){%>
+        <div class="ui vertical segment">
+          <div class="ui item">
+            <div class="content">
+              <div class="ui header">
+                <%= review.title %>
+              </div>
+              <div class="meta">
+                <%= review.rating%>
+              </div>
+              <div class="description">
+                <%= review.text %>
+              </div>
+              <div class="extra">
+                <%= review.author %> <%= review.created %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <%})
+    }%>
+  </div>
+</div>
+
+
 <% include ../partials/footer %>

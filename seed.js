@@ -84,6 +84,20 @@ var data =[{
 }
 ]
 
+var reviews= [{
+  title: "Best item ever!",
+  author: "HubbaWubba",
+  text: "I know this sounds overrated but this really helped my levelling. I could summon corpses in no time and it helped my necromancy career",
+  rating: 5
+},{
+  title: "Brain Dead",
+  author: "Billy",
+  text: "Whoever made this had no idea what they were doing. Nearly lost a leg.",
+  rating: 2
+}
+
+]
+
 function seedDB(){
   Product.remove({},function(err){
     if(err){
@@ -96,6 +110,16 @@ function seedDB(){
             console.log(err);
           } else{
             console.log("added product");
+            Review.create(reviews[0], function(err, newlyCreatedReview){
+              if(err){
+                console.log(err);
+              } else{
+                product.reviews.push(newlyCreatedReview);
+                product.save();
+                console.log("created new review");
+              }
+              })
+
           }
         })
       })
