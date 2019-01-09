@@ -12,7 +12,8 @@ var   express = require("express"),
 
 var productRoutes = require("./routes/products"),
     reviewRoutes = require("./routes/reviews"),
-    mainRoutes = require("./routes/index");
+    mainRoutes = require("./routes/index"),
+    shoppingRoutes = require("./routes/shopping");
 
 mongoose.connect("mongodb://localhost/sample_shop");
 app.set("view engine", "ejs");
@@ -41,7 +42,8 @@ app.use(function(req,res,next){
 
 app.use("/", mainRoutes);
 app.use("/products", productRoutes);
-app.use("/products/:id/reviews", reviewRoutes)
+app.use("/products/:id/reviews", reviewRoutes);
+app.use(shoppingRoutes);
 
 
 app.listen(process.env.PORT || 3000, function(){

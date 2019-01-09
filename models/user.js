@@ -8,11 +8,12 @@ var userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product"
   }],
-  email: String
-  // carts: [{
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "Cart"
-  // }],
+  email: String,
+  cart: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Product",
+    frequency: Number
+  }]
   // orders: [{
   //   type: mongoose.Schema.Types.ObjectId,
   //   ref: "Order"

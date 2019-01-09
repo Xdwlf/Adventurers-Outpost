@@ -27,9 +27,10 @@
       <a href="/register" class="item">Sign Up!</a>
     <% } else{ %>
       <a href="/logout" class="item">Log Out</a>
-    <% }
-      if(currentUser){ %>
-        <a href="#" class="item"><i id="header-icon" class="fas fa-user-astronaut"></i><span class="spacing-span"></span> <%=currentUser.username%></a>
+    <% } %>
+    <a class="item header-icon" href="/cart"><i class="fas fa-shopping-cart"></i></a>
+      <% if(currentUser){ %>
+        <a href="#" class="item"><i class="fas fa-user-astronaut header-icon"></i><span class="spacing-span"></span> <%=currentUser.username%></a>
       <% } %>
   </div>
   </div>

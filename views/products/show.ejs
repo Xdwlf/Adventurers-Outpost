@@ -14,7 +14,10 @@
           <div id="product-description" class="description">
             <%= product.description %>
           </div>
-          <button id="add-cart" type="button" class="ui large right floated green button">Add to Cart</button>
+          <form action="/cart" method="POST">
+            <input class="display-none" type="text" name="product_id" value="<%=product._id%>">
+            <button id="add-cart" class="ui large right floated green button">Add to Cart</button>
+          </form>
 
         </div>
       </div>
