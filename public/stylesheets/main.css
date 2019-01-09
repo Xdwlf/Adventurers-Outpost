@@ -1,0 +1,8 @@
+.ui.fluid.card .blurring.image{
+}
+
+.card .image img, .ui.card .image #image-thumb{
+  object-fit: cover;
+  height: 200px;
+  width: 100%;
+}

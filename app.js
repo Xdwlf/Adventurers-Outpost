@@ -7,7 +7,8 @@ var   express = require("express"),
       app     = express();
 
 var productRoutes = require("./routes/products"),
-    reviewRoutes = require("./routes/reviews");
+    reviewRoutes = require("./routes/reviews"),
+    mainRoutes = require("./routes/index");
 
 mongoose.connect("mongodb://localhost/sample_shop");
 app.set("view engine", "ejs");
@@ -16,11 +17,7 @@ app.use(express.static(__dirname + "/public"));
 seedDB();
 
 
-app.get("/", function(req,res){
-  res.render("home");
-});
-
-
+app.use("/", mainRoutes);
 app.use("/products", productRoutes);
 app.use("/products/:id/reviews", reviewRoutes)
 
