@@ -2,13 +2,13 @@ var mongoose = require("mongoose");
 var passportLocalMongoose = require("passport-local-mongoose");
 
 var userSchema = new mongoose.Schema({
-  username: String,
   password: String,
-  email: String,
+  username: String,
   wishlist: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product"
-  }]
+  }],
+  email: String
   // carts: [{
   //   type: mongoose.Schema.Types.ObjectId,
   //   ref: "Cart"

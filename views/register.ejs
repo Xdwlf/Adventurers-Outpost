@@ -1,0 +1,24 @@
+<% include ./partials/header %>
+
+<div class="ui container">
+  <div class="ui main container equal width form">
+    <h2 class="header">Sign Up!</h2>
+    <form method="POST" action="/" class="ui form">
+        <div class="field">
+          <label>Username</label>
+          <input type="text" name="username" placeholder="Username" required>
+        </div>
+        <div class="field">
+          <label>E-mail Address</label>
+          <input type="email" name="email" placeholder="Email" required>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" name="password" placeholder="Password" required>
+        </div>
+        <button class="ui fluid teal button">Submit</button>
+    </form>
+  </div>
+</div>
+
+<% include ./partials/footer %>
