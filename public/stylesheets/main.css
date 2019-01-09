@@ -6,3 +6,34 @@
   height: 200px;
   width: 100%;
 }
+
+.ui.container.form{
+  max-width: 500px !important;
+}
+
+.container.spacing{
+  height:80px;
+}
+
+#review-container{
+  margin-top:40px;
+}
+
+#main-product-content{
+  height:100%
+}
+
+#product-title{
+  margin-top:10px;
+  margin-bottom: 25px;
+}
+
+#product-description{
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
+#add-cart{
+  margin-top: auto;
+  margin-bottom: 10px;
+}
