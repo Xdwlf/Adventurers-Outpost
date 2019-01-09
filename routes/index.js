@@ -12,26 +12,38 @@ router.get("/register",function(req,res){
   res.render("register");
 })
 
+//Creates User
 router.post("/", function(req,res){
-  console.log(req.body.user);
   var newUser = new User({
     email: req.body.email,
     username: req.body.username
   })
   User.register(newUser, req.body.password, function(err,user){
-    console.log("registering user");
     if(err){
-      console.log(err);
       res.redirect("/register");
     }
-    console.log("no err in mongoose")
     passport.authenticate("local")(req,res,function(){
-      console.log(user);
-      res.send("user saved");
+      res.redirect("/products");
     })
   })
 })
 
+//Login Route
+router.get("/login", function(req,res){
+  res.render("login");
+})
+
+//logs in
+router.post("/login", passport.authenticate("local", {
+  successRedirect: "/products",
+  failureRedirect: "/login"
+}), function(req, res){
+})
+
+router.get("/logout", function(req,res){
+  req.logout();
+  res.redirect("/products");
+})
 
 
 module.exports = router;

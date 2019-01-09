@@ -24,7 +24,9 @@
 
 <div id="review-container" class="ui container segment">
   <h4 class="header">Reviews<h4>
-  <a class="ui pink button" href="/products/<%= product._id %>/reviews/new">Review this Product</a>
+  <% if(currentUser){ %>
+    <a class="ui pink button" href="/products/<%= product._id %>/reviews/new">Review this Product</a>
+  <% } %>
   <hr>
   <div class="ui items vertical segment">
     <% if(product.reviews){
@@ -47,9 +49,12 @@
                 <%= review.text %>
               </div>
               <div class="extra">
-                <%= review.author %> <%= review.created.toDateString() %>
+                <%= review.author.username %> <%= review.created.toDateString() %>
               </div>
-              <a class="ui small basic yellow button" href="/products/<%=product.id%>/reviews/<%= review._id %>/edit">Edit Review</a>
+              <% if(currentUser && currentUser._id=== review.author.id){ %>
+                <a class="ui small basic yellow button" href="/products/<%=product.id%>/reviews/<%= review._id %>/edit">Edit Review</a>
+
+              <% } %>
             </div>
           </div>
         </div>

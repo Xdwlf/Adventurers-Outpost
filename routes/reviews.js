@@ -24,6 +24,9 @@ router.post("/", function(req,res){
           console.log(err);
           res.redirect("/products/"+ req.params.id);
         } else{
+          createdReview.author.id = req.user._id;
+          createdReview.author.username= req.user.username;
+          createdReview.save();
           foundProduct.reviews.push(createdReview);
           foundProduct.save();
           console.log(foundProduct);

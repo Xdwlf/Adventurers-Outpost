@@ -1,6 +1,7 @@
 var mongoose= require("mongoose"),
     Product = require("./models/product"),
-    Review = require("./models/review");
+    Review = require("./models/review"),
+    User = require("./models/user");
 
 var data =[{
   name: "Cyborg Eye",
@@ -95,36 +96,54 @@ var reviews= [{
   text: "Whoever made this had no idea what they were doing. Nearly lost a leg.",
   rating: 2
 }
-
 ]
 
-function seedDB(){
-  Product.remove({},function(err){
-    if(err){
-      console.log(err);
-    } else{
-      console.log("removed all products");
-      data.forEach(function(seed){
-        Product.create(seed, function(err,product){
-          if(err){
-            console.log(err);
-          } else{
-            console.log("added product");
-            Review.create(reviews[0], function(err, newlyCreatedReview){
-              if(err){
-                console.log(err);
-              } else{
-                product.reviews.push(newlyCreatedReview);
-                product.save();
-                console.log("created new review");
-              }
-              })
+var users=[{
+  username: "HubbaWubba",
+  email: "hb@gmail.com"
+}]
 
-          }
+var password="password";
+
+
+function seedDB(){
+  User.remove({},function(err){
+    User.register(users[0], password, function(err, user){
+      if(err){
+        console.log(err);
+      }
+    console.log("users removed");
+    Product.remove({},function(err){
+      if(err){
+        console.log(err);
+      } else{
+        console.log("removed all products");
+        data.forEach(function(seed){
+          Product.create(seed, function(err,product){
+            if(err){
+              console.log(err);
+            } else{
+              console.log("added product");
+              Review.create(reviews[0], function(err, newlyCreatedReview){
+                if(err){
+                  console.log(err);
+                } else{
+                  newlyCreatedReview.author.id = user._id;
+                  newlyCreatedReview.author.username= user.username;
+                  newlyCreatedReview.save();
+                  product.reviews.push(newlyCreatedReview);
+                  product.save();
+                  console.log("created new review");
+                }
+              })
+            }
+          })
         })
-      })
-    }
-  });
+      }
+    });
+    })
+  })
+
 }
 
 module.exports= seedDB;

@@ -11,7 +11,6 @@ var reviewSchema= new mongoose.Schema({
     username: String
   },
   text: String,
-  author: String,
   created: {type: Date,
   default: Date.now}
 })
