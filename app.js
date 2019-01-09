@@ -4,6 +4,7 @@ var   express = require("express"),
       methodOverride = require("method-override"),
       passport = require("passport"),
       localStrategy = require("passport-local"),
+      session = require("express-session"),
       Product= require("./models/product"),
       Review = require("./models/review"),
       User = require("./models/user")
@@ -20,13 +21,23 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
+
 seedDB();
 
-app.use(require("express-session")({
+app.use(session({ //creates new id everytime: MUST FIX
   secret: "The Cake is a Lie",
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: {secure: false,
+  maxAge: 600000}
 }))
+
+// app.use(session({
+//   genid: function(req){
+//     return genuuid();
+//   },
+//   secret: "The Cake is a Lie"
+// }))
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -35,7 +46,11 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 //middleware for every request
+
+
 app.use(function(req,res,next){
+  console.log(req.session);
+  res.locals.session = req.session;
   res.locals.currentUser = req.user;
   next();
 })
