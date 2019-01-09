@@ -21,6 +21,7 @@
             <input class="display-none" type="text" name="product_id" value="<%=product._id%>">
             <input type="number" name="quantity" value="1" min="1" step="1" max="<%= product.inventory %>">
             <button id="add-cart" class="ui large right floated green button">Add to Cart</button>
+            <!-- Needs to prevent errors from unregistered user -->
           </form>
 
         </div>
