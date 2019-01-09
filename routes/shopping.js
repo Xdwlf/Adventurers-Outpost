@@ -5,7 +5,19 @@ var express= require("express"),
   router = express.Router();
 
 router.get("/cart", function(req,res){
-  res.render("shopping/cart");
+  if(req.user){
+    User.findById(req.user._id).populate("cart").exec(function(err, foundUser){
+      if(err){
+        console.log(err);
+        res.redirect("/products");
+      } else{
+        res.render("shopping/cart", {user: foundUser});
+      }
+    })
+  } else{
+    res.render("shopping/cart");
+  }
+
 })
 
 router.post("/cart", function(req,res){
@@ -19,7 +31,8 @@ router.post("/cart", function(req,res){
           console.log(err);
           res.redirect("/products");
         } else{
-          foundUser.cart(foundProduct);
+          foundUser.cart.push(foundProduct);
+          foundUser.quantity.push(req.body.quantity);
           foundUser.save();
           console.log(foundUser);
           res.redirect("/products");

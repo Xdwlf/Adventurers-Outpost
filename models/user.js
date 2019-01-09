@@ -11,9 +11,9 @@ var userSchema = new mongoose.Schema({
   email: String,
   cart: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Product",
-    frequency: Number
-  }]
+    ref: "Product"
+  }],
+  quantity: [Number]
   // orders: [{
   //   type: mongoose.Schema.Types.ObjectId,
   //   ref: "Order"

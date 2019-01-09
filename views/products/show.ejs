@@ -14,8 +14,12 @@
           <div id="product-description" class="description">
             <%= product.description %>
           </div>
+          <div id="product-description" class="text">
+            $ <%= product.price %>
+          </div>
           <form action="/cart" method="POST">
             <input class="display-none" type="text" name="product_id" value="<%=product._id%>">
+            <input type="number" name="quantity" value="1" min="1" step="1" max="<%= product.inventory %>">
             <button id="add-cart" class="ui large right floated green button">Add to Cart</button>
           </form>
 

@@ -1,26 +1,44 @@
 <% include ../partials/header %>
 
 <div class="ui container">
-  <h1 class="header">Shopping Cart</h1>
-  <div class="ui items">
-    <div class="item">
-      <div class="image">
-        <img src="/images/wireframe/image.png">
+  <h1 class="header">
+    <% if(currentUser){ %>
+      <%=user.username%>'s
+      <a class="ui orange button" href="#">Update Cart</a>
+    <% } %> Shopping Cart</h1>
+    <% if(currentUser){ %>
+      <div class="ui items">
+        <% user.cart.forEach(function(item, index){ %>
+          <div class="item">
+            <div class="image">
+              <img src="<%= item.image %>">
+            </div>
+            <div class="content">
+              <a class="header"><%= item.name %> </a>
+              <div class="description">
+                <%= item.description %>
+              </div>
+              <div class="extra">
+                <input type="number" name="quantity" value="<%= user.quantity[index] %>" min="1" max="<%=item.inventory%>">
+
+              </div>
+            </div>
+          </div>
+        <% }) %>
+
       </div>
-      <div class="content">
-        <a class="header">Header</a>
-        <div class="meta">
-          <span>Description</span>
-        </div>
-        <div class="description">
-          <p></p>
-        </div>
-        <div class="extra">
-          Additional Details
-        </div>
+    <% } else{ %>
+      <div class="ui content">
+        Please sign in or register to add items to your cart
       </div>
-    </div>
-  </div>
+
+    <% } %>
+    <% if(currentUser){ %>
+      <a class="ui green huge button" href="#">Buy Now</a>
+
+    <% } %>
+
+
 </div>
 
 
