@@ -5,7 +5,9 @@ var   express = require("express"),
       passport = require("passport"),
       localStrategy = require("passport-local"),
       session = require("express-session"),
+      MongoDBStore = require("connect-mongodb-session")(session),
       Product= require("./models/product"),
+      SessionCart = require("./models/sessioncart"),
       Review = require("./models/review"),
       User = require("./models/user")
       seedDB = require("./seed"),
@@ -24,13 +26,13 @@ app.use(methodOverride("_method"));
 
 seedDB();
 
-app.use(session({ //creates new id everytime: MUST FIX
-  secret: "The Cake is a Lie",
-  resave: false,
-  saveUninitialized: false,
-  cookie: {secure: false,
-  maxAge: 600000}
-}))
+var store = new MongoDBStore({
+  uri: "mongodb://localhost/sample_shop",
+  collection: "sessions"
+}, function(err){
+  console.log(err);
+})
+
 
 // app.use(session({
 //   genid: function(req){
@@ -45,6 +47,14 @@ passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.set("trust proxy", 1);
+app.use(session({ //creates new id everytime: MUST FIX
+  secret: "The Cake is a Lie",
+  resave: false,
+  store: store,
+  saveUninitialized: true,
+  cookie: {secure: false}
+}))
 //middleware for every request
 
 
