@@ -29,7 +29,6 @@ router.post("/", function(req,res){
           createdReview.save();
           foundProduct.reviews.push(createdReview);
           foundProduct.save();
-          console.log(foundProduct);
           res.redirect("/products/"+ foundProduct._id);
         }
       })

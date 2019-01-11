@@ -16,7 +16,17 @@ router.get("/cart", function(req,res){
       }
     })
   } else{
-    res.render("shopping/cart");
+    SessionCart.find({sessionid: req.sessionID}).populate("items").exec(function(err, foundCart){
+      if(err){
+        console.log(err)
+      } else{
+        if(foundCart.length===0){
+          res.render("shopping/cart");
+        } else{
+          res.render("shopping/cart", {cart: foundCart[0]})
+        }
+      }
+    })
   }
 
 })
@@ -33,25 +43,40 @@ router.post("/cart", function(req,res){
               console.log(err);
               res.redirect("/products");
             } else{
-              foundUser.cart.push(foundProduct);
-              foundUser.quantity.push(req.body.quantity);
+              let i = foundUser.cart.indexOf(foundProduct);
+              if(i >= 0){
+                foundUser.quantity[i] += req.body.quantity;
+              } else{
+                foundUser.cart.push(foundProduct);
+                foundUser.quantity.push(req.body.quantity);
+              }
               foundUser.save();
-              console.log(foundUser);
               res.redirect("/products");
             }
           })
         } else{
               SessionCart.find({sessionid: req.sessionID}, function(err, foundCart){
                 if(err){
-                  SessionCart.create({sessionid: req.session.id}, function(err, createdCart){
-                    createdCart.items.push(foundProduct);
-                    res.redirect("/products")
-                  })
+                  console.log(err);
                 } else{
-                  foundCart.items.push(foundProduct)
-                  foundCart.save();
-                  console.log("no error");
-                  console.log(foundCart);
+                  if(foundCart.length == 0){
+                    SessionCart.create({sessionid: req.session.id}, function(err, createdCart){
+                      createdCart.items.push(foundProduct);
+                      createdCart.quantity.push(req.body.quantity);
+                      createdCart.save();
+                      console.log(createdCart);
+                      res.redirect("/products")
+                    })
+                  } else{
+                    console.log(foundCart);
+                    foundCart[0].items.push(foundProduct);
+                    foundCart[0].quantity.push(req.body.quantity);
+                    foundCart[0].save();
+                    console.log("no error");
+                    console.log(foundCart);
+                    res.redirect("/products")
+                  }
+
                 }
               })
         }
@@ -60,5 +85,6 @@ router.post("/cart", function(req,res){
     })
 
 })
+
 
 module.exports= router;

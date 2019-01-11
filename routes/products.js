@@ -69,7 +69,6 @@ router.get("/:id",function(req,res){
       console.log(err);
       res.redirect("/products")
     } else{
-      console.log(foundProduct);
       res.render("products/show",{product: foundProduct});
     }
   })

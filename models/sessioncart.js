@@ -5,8 +5,8 @@ sessionCartSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product"
   }],
-  frequency: [Number],
-  sessionid: Number
+  quantity: [Number],
+  sessionid: String
 })
 
 module.exports = mongoose.model("SessionCart", sessionCartSchema);

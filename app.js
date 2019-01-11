@@ -34,12 +34,13 @@ var store = new MongoDBStore({
 })
 
 
-// app.use(session({
-//   genid: function(req){
-//     return genuuid();
-//   },
-//   secret: "The Cake is a Lie"
-// }))
+app.use(session({ //creates new id everytime: MUST FIX
+  secret: "The Cake is a Lie",
+  resave: false,
+  store: store,
+  saveUninitialized: true,
+  cookie: {secure: false}
+}))
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -48,18 +49,12 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.set("trust proxy", 1);
-app.use(session({ //creates new id everytime: MUST FIX
-  secret: "The Cake is a Lie",
-  resave: false,
-  store: store,
-  saveUninitialized: true,
-  cookie: {secure: false}
-}))
+
 //middleware for every request
 
 
 app.use(function(req,res,next){
-  console.log(req.session);
+  console.log(req.user);
   res.locals.session = req.session;
   res.locals.currentUser = req.user;
   next();
