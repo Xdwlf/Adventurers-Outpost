@@ -2,9 +2,9 @@
 
 <div class="ui container">
   <h1 class="header">
+    <a class="ui orange button" href="#">Update Cart</a>
     <% if(currentUser){ %>
       <%=user.username%>'s
-      <a class="ui orange button" href="#">Update Cart</a>
     <% } %> Shopping Cart</h1>
     <% if(currentUser){ %>
       <div class="ui items">
@@ -20,15 +20,17 @@
               </div>
               <div class="extra">
                 <input type="number" name="quantity" value="<%= user.quantity[index] %>" min="1" max="<%=item.inventory%>">
-
               </div>
             </div>
           </div>
+          <form class="" action="/cart?_method=DELETE" method="POST">
+            <input class="display-none" type="text" name="itemIndex" value="<%= index %> "">
+            <input type="submit" name="" value="Remove">
+          </form>
         <% }) %>
-
       </div>
     <% } else{
-      if(cart){ %>  
+      if(cart){ %>
         <div class="ui items">
           <% cart.items.forEach(function(item, index){ %>
             <div class="item">

@@ -95,6 +95,23 @@ router.post("/cart", function(req,res){
     })
 })
 
+//remove item from Cart
+router.delete("/cart", function(req,res){
+  if(req.user){
+    console.log(req.body.itemIndex);
+    User.findById(req.user._id, function(err, foundUser){
+      if(err){
+        console.log(err);
+      } else{
+
+      }
+    })
+  } else{
+    console.log("removing from sessionCart")
+  }
+  res.send("this is the delete item from cart route")
+})
+
 //finds index of mongoose item in a mongoose array
 function findItemIndex(array, item){
   for(let i = 0; i< array.length; i++){
@@ -103,6 +120,16 @@ function findItemIndex(array, item){
     }
   }
   return -1;
+}
+
+//removes a product from mongoose cart
+function removeItemFromCart(array, index){
+  array= array.filter(function(item, i){
+    if(i !== index){
+      return item;
+    }
+  })
+  return array;
 }
 
 
