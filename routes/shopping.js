@@ -5,6 +5,7 @@ var express= require("express"),
   SessionCart = require("../models/sessioncart"),
   router = express.Router();
 
+//displays user or sessions current shopping cart
 router.get("/cart", function(req,res){
   if(req.user){
     User.findById(req.user._id).populate("cart").exec(function(err, foundUser){
@@ -28,9 +29,9 @@ router.get("/cart", function(req,res){
       }
     })
   }
-
 })
 
+//adds a product to the cart
 router.post("/cart", function(req,res){
     Product.findById(req.body.product_id, function(err, foundProduct){
       if(err){
@@ -43,15 +44,18 @@ router.post("/cart", function(req,res){
               console.log(err);
               res.redirect("/products");
             } else{
-              let i = foundUser.cart.indexOf(foundProduct);
+              let i = findItemIndex(foundUser.cart, foundProduct);
               if(i >= 0){
-                foundUser.quantity[i] += req.body.quantity;
+                let newQuantity = foundUser.quantity[i]+ parseInt(req.body.quantity);
+                foundUser.quantity.set(i, newQuantity);
               } else{
                 foundUser.cart.push(foundProduct);
                 foundUser.quantity.push(req.body.quantity);
               }
-              foundUser.save();
-              res.redirect("/products");
+              foundUser.save(function(err){
+                if(err) console.log(err)
+                else res.redirect("/products");
+              });
             }
           })
         } else{
@@ -64,27 +68,42 @@ router.post("/cart", function(req,res){
                       createdCart.items.push(foundProduct);
                       createdCart.quantity.push(req.body.quantity);
                       createdCart.save();
-                      console.log(createdCart);
                       res.redirect("/products")
                     })
                   } else{
-                    console.log(foundCart);
-                    foundCart[0].items.push(foundProduct);
-                    foundCart[0].quantity.push(req.body.quantity);
-                    foundCart[0].save();
-                    console.log("no error");
-                    console.log(foundCart);
-                    res.redirect("/products")
+                    console.log(foundCart[0].items);
+                    console.log(foundProduct);
+                    let i = findItemIndex(foundCart[0].items, foundProduct);
+                    if( i>=0 ){
+                      let newQuantity = foundCart[0].quantity[i] + parseInt(req.body.quantity);
+                      foundCart[0].quantity.set(i, newQuantity);
+                      console.log(foundCart[0]);
+                    } else{
+                      foundCart[0].items.push(foundProduct);
+                      foundCart[0].quantity.push(req.body.quantity);
+                    }
+                    foundCart[0].save(function(err){
+                      if(err) console.log(err);
+                      else res.redirect("/products")
+                    });
                   }
 
                 }
               })
         }
-
       }
     })
-
 })
+
+//finds index of mongoose item in a mongoose array
+function findItemIndex(array, item){
+  for(let i = 0; i< array.length; i++){
+    if(array[i]._id.equals(item._id)){
+      return i;
+    }
+  }
+  return -1;
+}
 
 
 module.exports= router;
