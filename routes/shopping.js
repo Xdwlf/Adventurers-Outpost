@@ -13,7 +13,7 @@ router.get("/cart", function(req,res){
         console.log(err);
         res.redirect("/products");
       } else{
-        res.render("shopping/cart", {user: foundUser});
+        res.render("shopping/cart", {user: foundUser, cart:null});
       }
     })
   } else{
@@ -22,7 +22,7 @@ router.get("/cart", function(req,res){
         console.log(err)
       } else{
         if(foundCart.length===0){
-          res.render("shopping/cart");
+          res.render("shopping/cart",{cart:null});
         } else{
           res.render("shopping/cart", {cart: foundCart[0]})
         }
@@ -71,13 +71,10 @@ router.post("/cart", function(req,res){
                       res.redirect("/products")
                     })
                   } else{
-                    console.log(foundCart[0].items);
-                    console.log(foundProduct);
                     let i = findItemIndex(foundCart[0].items, foundProduct);
                     if( i>=0 ){
                       let newQuantity = foundCart[0].quantity[i] + parseInt(req.body.quantity);
                       foundCart[0].quantity.set(i, newQuantity);
-                      console.log(foundCart[0]);
                     } else{
                       foundCart[0].items.push(foundProduct);
                       foundCart[0].quantity.push(req.body.quantity);
@@ -95,6 +92,34 @@ router.post("/cart", function(req,res){
     })
 })
 
+//update item amount in cart
+router.put("/cart", function(req,res){
+  if(req.user){
+    User.findById(req.user._id, function(err, foundUser){
+      if(err){
+        console.log(err)
+      } else{
+        foundUser.quantity.set(parseInt(req.body.itemIndex), parseInt(req.body.itemQuantity));
+        console.log(foundUser);
+        foundUser.save();
+        res.redirect("/cart");
+      }
+    })
+  } else{
+    console.log("itemIndex" + req.body.itemIndex);
+    console.log("itemQuantity" + req.body.itemQuantity);
+    SessionCart.find({sessionid: req.sessionID}, function(err, foundCart){
+      if(err){
+        console.log(err);
+      } else{
+        foundCart[0].quantity.set(parseInt(req.body.itemIndex), parseInt(req.body.itemQuantity));
+        foundCart[0].save();
+        res.redirect("/cart");
+      }
+    })
+  }
+})
+
 //remove item from Cart
 router.delete("/cart", function(req,res){
   if(req.user){
@@ -103,11 +128,9 @@ router.delete("/cart", function(req,res){
       if(err){
         console.log(err);
       } else{
-        console.log("removing item");
         let index = parseInt(req.body.itemIndex);
         foundUser.cart = removeItemFromCart(foundUser.cart, index);
         foundUser.quantity = removeItemFromCart(foundUser.quantity, index);
-        console.log(foundUser)
         foundUser.save();
         res.redirect("/cart");
       }
@@ -119,8 +142,6 @@ router.delete("/cart", function(req,res){
         console.log(err);
       } else{
         let index = parseInt(req.body.itemIndex);
-        console.log("foundCart" + foundCart);
-        console.log("foundCart items "+ foundCart[0].items);
         foundCart[0].items = removeItemFromCart(foundCart[0].items, index);
         foundCart[0].quantity = removeItemFromCart(foundCart[0].quantity, index);
         foundCart[0].save();
@@ -142,13 +163,11 @@ function findItemIndex(array, item){
 
 //removes a product from mongoose cart
 function removeItemFromCart(array, index){
-  console.log(array);
   array= array.filter(function(item, i){
     if(i !== index){
       return item;
     }
   })
-  console.log(array)
   return array;
 }
 

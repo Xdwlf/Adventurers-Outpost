@@ -1,8 +1,7 @@
 <% include ../partials/header %>
-
+<% var subtotal = 0 %>
 <div class="ui container">
   <h1 class="header">
-    <a class="ui orange button" href="#">Update Cart</a>
     <% if(currentUser){ %>
       <%=user.username%>'s
     <% } %> Shopping Cart</h1>
@@ -18,11 +17,20 @@
               <div class="description">
                 <%= item.description %>
               </div>
+              <div class="price">
+                $ <%= item.price %>
+                <% subtotal += item.price * user.quantity[index] %>
+              </div>
               <div class="extra">
-                <input type="number" name="quantity" value="<%= user.quantity[index] %>" min="1" max="<%=item.inventory%>">
+                <form class="" action="/cart?_method=PUT" method="POST">
+                  <input type="number" name="itemQuantity" value="<%= user.quantity[index] %>" min="1" max="<%=item.inventory%>">
+                  <input class="display-none" type="text" name="itemIndex" value="<%= index %> "">
+                  <input type="submit" name="" value="Update">
+                </form>
               </div>
             </div>
           </div>
+
           <form class="" action="/cart?_method=DELETE" method="POST">
             <input class="display-none" type="text" name="itemIndex" value="<%= index %> "">
             <input type="submit" name="" value="Remove">
@@ -42,8 +50,18 @@
                 <div class="description">
                   <%= item.description %>
                 </div>
+                <div class="price">
+                  $ <%= item.price %>
+                  <% subtotal += item.price * cart.quantity[index] %>
+                </div>
                 <div class="extra">
-                  <input type="number" name="quantity" value="<%= cart.quantity[index] %>" min="1" max="<%=item.inventory%>">
+                  <div class="extra">
+                    <form class="" action="/cart?_method=PUT" method="POST">
+                      <input type="number" name="itemQuantity" value="<%= cart.quantity[index] %>" min="1" max="<%=item.inventory%>">
+                      <input class="display-none" type="text" name="itemIndex" value="<%= index %> "">
+                      <input type="submit" name="" value="Update">
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
@@ -56,11 +74,35 @@
       <% }%>
 
     <% } %>
-
+    <% if(currentUser && currentUser.quantity.length == 0 ){%>
+        <div class="">
+          You have no items in your cart.
+        </div>
+    <% } else if(cart !== null && cart.items.length===0){ %>
+      <div class="">
+        You have no items in your cart.
+      </div>
+    <% } else { %>
+      <div class="content">
+        <% var tax = subtotal * 0.0824;
+          var shipping= 15.99;
+          var total = subtotal + tax + shipping;
+        %>
+        <div class="">
+          <strong>Subtotal:</strong> $ <%= subtotal %>
+        </div>
+        <div class="">
+          <strong>Est. Tax:</strong> $ <%= tax.toFixed(2) %>
+        </div>
+        <div class="">
+          <strong>Est. Shipping:</strong> $ <%= shipping %>
+        </div>
+        <div class="">
+          <strong>Total:</strong> $ <%= total.toFixed(2) %>
+        </div>
+      </div>
       <a class="ui green huge button" href="#">Buy Now</a>
-
-
-
+    <% } %>
 
 </div>
 
