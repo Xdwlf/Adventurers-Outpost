@@ -103,13 +103,31 @@ router.delete("/cart", function(req,res){
       if(err){
         console.log(err);
       } else{
-
+        console.log("removing item");
+        let index = parseInt(req.body.itemIndex);
+        foundUser.cart = removeItemFromCart(foundUser.cart, index);
+        foundUser.quantity = removeItemFromCart(foundUser.quantity, index);
+        console.log(foundUser)
+        foundUser.save();
+        res.redirect("/cart");
       }
     })
   } else{
     console.log("removing from sessionCart")
+    SessionCart.find({sessionid: req.sessionID}, function(err, foundCart){
+      if(err){
+        console.log(err);
+      } else{
+        let index = parseInt(req.body.itemIndex);
+        console.log("foundCart" + foundCart);
+        console.log("foundCart items "+ foundCart[0].items);
+        foundCart[0].items = removeItemFromCart(foundCart[0].items, index);
+        foundCart[0].quantity = removeItemFromCart(foundCart[0].quantity, index);
+        foundCart[0].save();
+        res.redirect("/cart");
+      }
+    })
   }
-  res.send("this is the delete item from cart route")
 })
 
 //finds index of mongoose item in a mongoose array
@@ -124,11 +142,13 @@ function findItemIndex(array, item){
 
 //removes a product from mongoose cart
 function removeItemFromCart(array, index){
+  console.log(array);
   array= array.filter(function(item, i){
     if(i !== index){
       return item;
     }
   })
+  console.log(array)
   return array;
 }
 

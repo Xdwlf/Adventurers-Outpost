@@ -47,6 +47,10 @@
                 </div>
               </div>
             </div>
+            <form class="" action="/cart?_method=DELETE" method="POST">
+              <input class="display-none" type="text" name="itemIndex" value="<%= index %> "">
+              <input type="submit" name="" value="Remove">
+            </form>
             <%}); %>
       </div>
       <% }%>
