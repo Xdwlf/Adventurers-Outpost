@@ -16,7 +16,8 @@ var   express = require("express"),
 var productRoutes = require("./routes/products"),
     reviewRoutes = require("./routes/reviews"),
     mainRoutes = require("./routes/index"),
-    shoppingRoutes = require("./routes/shopping");
+    shoppingRoutes = require("./routes/shopping"),
+    profileRoutes = require("./routes/profile");
 
 mongoose.connect("mongodb://localhost/sample_shop");
 app.set("view engine", "ejs");

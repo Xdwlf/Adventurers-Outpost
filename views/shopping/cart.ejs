@@ -78,30 +78,48 @@
         <div class="">
           You have no items in your cart.
         </div>
+    <!-- User is not logged in but there is a session cart and its length is 0 -->
     <% } else if(cart !== null && cart.items.length===0){ %>
+      <div class="">
+        You have no items in your cart.
+      </div>
+    <!-- There is no session cart -->
+    <% } else if (!currentUser && !cart){%>
       <div class="">
         You have no items in your cart.
       </div>
     <% } else { %>
       <div class="content">
         <% var tax = subtotal * 0.0824;
-          var shipping= 15.99;
+
+          var shipping= Math.max(5.99, subtotal*0.01);
           var total = subtotal + tax + shipping;
         %>
         <div class="">
-          <strong>Subtotal:</strong> $ <%= subtotal %>
+          <strong>Subtotal:</strong> $ <%= subtotal.toFixed(2) %>
         </div>
         <div class="">
           <strong>Est. Tax:</strong> $ <%= tax.toFixed(2) %>
         </div>
         <div class="">
-          <strong>Est. Shipping:</strong> $ <%= shipping %>
+          <strong>Est. Shipping:</strong> $ <%= shipping.toFixed(2) %>
         </div>
         <div class="">
           <strong>Total:</strong> $ <%= total.toFixed(2) %>
         </div>
       </div>
-      <a class="ui green huge button" href="#">Buy Now</a>
+      <form action="/checkout" method="POST">
+        <script
+          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="pk_test_xkdAiECHGLnTHUCfsYu5He3G"
+          data-name="SampleShop"
+          data-billing-address="true"
+          data-zip-code="true"
+          data-description="Example charge"
+          data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+          data-locale="auto">
+        </script>
+      </form>
     <% } %>
 
 </div>
