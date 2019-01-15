@@ -64,6 +64,7 @@ app.use(function(req,res,next){
 app.use("/", mainRoutes);
 app.use("/products", productRoutes);
 app.use("/products/:id/reviews", reviewRoutes);
+app.use("/profile", profileRoutes);
 app.use(shoppingRoutes);
 
 
