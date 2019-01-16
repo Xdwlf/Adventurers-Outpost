@@ -1,14 +1,38 @@
 .ui.fluid.card .blurring.image{
+  background: none;
+
 }
 
 .card .image img, .ui.card .image #image-thumb{
   object-fit: cover;
   height: 200px;
   width: 100%;
+  background: none;
+  border-radius: 1px;
 }
+
+.blurring.dimmable.centered.image .content{
+  margin: 3px;
+  margin-left: 6px;
+}
+
+.ui.fluid.card{
+  border-radius: 0px;
+  box-shadow: none;
+}
+
+.ui.top.aligned.dimmer .content{
+  border-radius: 1px;
+  box-shadow: none;
+}
+
 
 .ui.container.form{
   max-width: 500px !important;
+}
+
+.detail-button{
+  margin-top:30%
 }
 
 .container.spacing{
@@ -25,6 +49,18 @@
 
 .display-none{
   display: none;
+}
+
+#wishlist-thumb{
+  object-fit: cover;
+  height: 150px;
+  width: 100%;
+  background: none;
+  border-radius: 1px;
+}
+
+#wishlist-content{
+  height: 150px;
 }
 
 #cart-thumb{

@@ -26,13 +26,12 @@
               <div class="ui special cards">
                 <div class="ui fluid card">
                     <div class="blurring dimmable centered image">
-                      <a href="/products/<%= product._id %>"><img id="image-thumb" src="<%=product.image%>"></a>
+                      <a href="/products/<%= product._id %>"><img id="wishlist-thumb" src="<%=product.image%>"></a>
                     </div>
-                  <div class="content">
+                  <div class="ui content" id="wishlist-content">
                     <a  href="/products/<%= product._id %>">
-                      <div class="header">
-                        <h4> <%= product.name %> </h4>
-                      </div>
+
+                        <div> <%= product.name %> </div>
                       <div class="meta">
                         <p> $ <%= product.price %> </p>
                       </div>
@@ -45,7 +44,7 @@
                       </form>
                       <form action="/profile/wishlist?_method=DELETE" method="POST">
                         <input class="display-none" type="text" name="product_id" value="<%=product._id%>">
-                        <button class="ui basic fluid button red tiny">Remove</button>
+                        <button class="ui basic fluid bottom attached button red tiny" style="margin-top:3px">Remove</button>
                       </form>
                     </div>
                   </div>
@@ -54,6 +53,10 @@
             </div>
           <% }) %>
         </div>
+
+
+
+
       </div>
     </div>
   </div>

@@ -9,22 +9,25 @@
           <div class="ui fluid card">
               <div class="blurring dimmable centered image">
                 <img id="image-thumb" src="<%=product.image%>">
-                <div class="ui dimmer">
+                <div class="content">
+                  <div class="description">
+                    <div class="header">
+                      <h4> <%= product.name %> </h4>
+                    </div>
+                    <div class="meta">
+                      <p> $ <%= product.price %> </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="ui top aligned dimmer">
                   <div class="content">
-                    <div class="center">
-                      <a class="ui button inverted" href="/products/<%= product._id %>"> More Info </a>
+                    <div class="container detail-button">
+                      <a class="ui button inverted" href="/products/<%= product._id %>"> See Details </a>
                     </div>
                   </div>
                 </div>
               </div>
-            <div class="content">
-              <div class="header">
-                <h4> <%= product.name %> </h4>
-              </div>
-              <div class="meta">
-                <p> $ <%= product.price %> </p>
-              </div>
-            </div>
+
           </div>
         </div>
       </div>
