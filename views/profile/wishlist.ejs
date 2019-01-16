@@ -19,7 +19,40 @@
       <div class="ui segment profile">
         <div class="ui header">
           Your Wishlist
-
+        </div>
+        <div class="ui content grid stackable">
+          <% user.wishlist.forEach(function(product){ %>
+            <div class="four wide column">
+              <div class="ui special cards">
+                <div class="ui fluid card">
+                    <div class="blurring dimmable centered image">
+                      <a href="/products/<%= product._id %>"><img id="image-thumb" src="<%=product.image%>"></a>
+                    </div>
+                  <div class="content">
+                    <a  href="/products/<%= product._id %>">
+                      <div class="header">
+                        <h4> <%= product.name %> </h4>
+                      </div>
+                      <div class="meta">
+                        <p> $ <%= product.price %> </p>
+                      </div>
+                    </a>
+                    <div class="extra">
+                      <form action="/cart" method="POST">
+                        <input class="display-none" type="text" name="product_id" value="<%=product._id%>">
+                        <input class="display-none" type="number" name="quantity" value="1" min="1" step="1" max="<%= product.inventory %>">
+                        <button class="ui basic fluid button green tiny">Add to Cart</button>
+                      </form>
+                      <form action="/profile/wishlist?_method=DELETE" method="POST">
+                        <input class="display-none" type="text" name="product_id" value="<%=product._id%>">
+                        <button class="ui basic fluid button red tiny">Remove</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }) %>
         </div>
       </div>
     </div>

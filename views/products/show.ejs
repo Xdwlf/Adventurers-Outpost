@@ -17,9 +17,12 @@
           <div id="product-description" class="text">
             $ <%= product.price %>
           </div>
-          <div class="">
-            <button id="add-cart" class="ui large right floated basic red button">Add to Wishlist</button>
-          </div>
+          <% if(currentUser){ %>
+            <form class="" action="/profile/wishlist" method="post">
+              <input class="display-none" type="text" name="product_id" value="<%=product._id %>">
+              <button id="add-cart" class="ui large right floated basic red button"><i class="fas fa-heart"></i></button>
+            </form>
+          <% } %>
           <div class="">
             <form action="/cart" method="POST">
               <input class="display-none" type="text" name="product_id" value="<%=product._id%>">
