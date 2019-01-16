@@ -6,7 +6,8 @@ var express= require("express"),
 router.get("/", function(req,res){
   Product.find({}, function(err,allProducts){
     if(err){
-      console.log(err);
+      req.flash("error", err.message);
+      res.redirect("/");
     } else{
       res.render("products/products",{products: allProducts});
     }
@@ -16,7 +17,8 @@ router.get("/", function(req,res){
 router.get("/clothing", function(req,res){
   Product.find({category: "clothing"}, function(err,allClothing){
     if(err){
-      console.log(err);
+      req.flash("error", err.message);
+      res.redirect("/products");
     } else{
       res.render("products/clothing",{products: allClothing});
     }
@@ -26,7 +28,8 @@ router.get("/clothing", function(req,res){
 router.get("/tech", function(req,res){
   Product.find({category: "tech"}, function(err,allTech){
     if(err){
-      console.log(err);
+      req.flash("error", err.message);
+      res.redirect("/products");
     } else{
       res.render("products/tech",{products: allTech});
     }
@@ -36,7 +39,8 @@ router.get("/tech", function(req,res){
 router.get("/consumables", function(req,res){
   Product.find({category: "consumable"}, function(err,allConsumables){
     if(err){
-      console.log(err);
+      req.flash("error", err.message);
+      res.redirect("/products");
     } else{
       res.render("products/consumables",{products: allConsumables});
     }
@@ -55,8 +59,10 @@ router.post("/",function(req,res){
   var newProduct = req.body.product;
   Product.create(newProduct, function(err, newlyCreatedProduct){
     if(err){
-      console.log(err);
+      req.flash("error", err.message);
+      res.redirect("/products");
     } else{
+      req.success("success", "Magical! You have invented a new item!")
       res.redirect("/products");
     }
   })
@@ -66,7 +72,7 @@ router.post("/",function(req,res){
 router.get("/:id",function(req,res){
   Product.findById(req.params.id).populate("reviews").exec(function(err, foundProduct){
     if(err){
-      console.log(err);
+      req.flash("error", err.message);
       res.redirect("/products")
     } else{
       res.render("products/show",{product: foundProduct});

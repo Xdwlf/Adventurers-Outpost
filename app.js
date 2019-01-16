@@ -6,6 +6,7 @@ var   express = require("express"),
       localStrategy = require("passport-local"),
       session = require("express-session"),
       MongoDBStore = require("connect-mongodb-session")(session),
+      flash = require("connect-flash"),
       Product= require("./models/product"),
       SessionCart = require("./models/sessioncart"),
       Review = require("./models/review"),
@@ -24,6 +25,7 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
+app.use(flash());
 
 // seedDB();
 
@@ -56,6 +58,8 @@ app.set("trust proxy", 1);
 
 app.use(function(req,res,next){
   console.log(req.user);
+  res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
   res.locals.session = req.session;
   res.locals.currentUser = req.user;
   next();

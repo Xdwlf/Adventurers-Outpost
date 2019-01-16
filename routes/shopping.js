@@ -10,7 +10,7 @@ router.get("/cart", function(req,res){
   if(req.user){
     User.findById(req.user._id).populate("cart").exec(function(err, foundUser){
       if(err){
-        console.log(err);
+        req.flash("error", err.message);
         res.redirect("/products");
       } else{
         res.render("shopping/cart", {user: foundUser, cart:null});
@@ -19,7 +19,8 @@ router.get("/cart", function(req,res){
   } else{
     SessionCart.find({sessionid: req.sessionID}).populate("items").exec(function(err, foundCart){
       if(err){
-        console.log(err)
+        req.flash("error", err.message);
+        res.redirect("/products");
       } else{
         if(foundCart.length===0){
           res.render("shopping/cart",{cart:null});
@@ -35,13 +36,13 @@ router.get("/cart", function(req,res){
 router.post("/cart", function(req,res){
     Product.findById(req.body.product_id, function(err, foundProduct){
       if(err){
-        console.log(err);
+        req.flash("error", err.message);
         res.redirect("/products");
       } else{
         if (req.user) {
           User.findById(req.user._id, function(err, foundUser){
             if(err){
-              console.log(err);
+              req.flash("error", err.message);
               res.redirect("/products");
             } else{
               let i = findItemIndex(foundUser.cart, foundProduct);
@@ -53,21 +54,28 @@ router.post("/cart", function(req,res){
                 foundUser.quantity.push(req.body.quantity);
               }
               foundUser.save(function(err){
-                if(err) console.log(err)
-                else res.redirect("/products");
+                if(err){
+                  req.flash("error", err.message);
+                  res.redirect("/products");
+                }  else{
+                  req.flash("success", "You've added " + foundProduct.name + " to your cart. Please purchase soon, for 10% of all profits will be donated to our pockets.")
+                  res.redirect("/products");
+                }
               });
             }
           })
         } else{
               SessionCart.find({sessionid: req.sessionID}, function(err, foundCart){
                 if(err){
-                  console.log(err);
+                  req.flash("error", err.message);
+                  res.redirect("/products");
                 } else{
                   if(foundCart.length == 0){
                     SessionCart.create({sessionid: req.session.id}, function(err, createdCart){
                       createdCart.items.push(foundProduct);
                       createdCart.quantity.push(req.body.quantity);
                       createdCart.save();
+                      req.flash("success", "You've added " + foundProduct.name + " to your cart.")
                       res.redirect("/products")
                     })
                   } else{
@@ -80,8 +88,14 @@ router.post("/cart", function(req,res){
                       foundCart[0].quantity.push(req.body.quantity);
                     }
                     foundCart[0].save(function(err){
-                      if(err) console.log(err);
-                      else res.redirect("/products")
+                      if(err){
+                        req.flash("error", err.message);
+                        res.redirect("/products")
+                      }
+                      else{
+                        req.flash("success", "You've added " + foundProduct.name + " to your cart. Support your local greedy merchant.")
+                        res.redirect("/products")
+                      }
                     });
                   }
 
@@ -97,11 +111,13 @@ router.put("/cart", function(req,res){
   if(req.user){
     User.findById(req.user._id, function(err, foundUser){
       if(err){
-        console.log(err)
+        req.flash("error", err.message);
+        res.redirect("/cart")
       } else{
         foundUser.quantity.set(parseInt(req.body.itemIndex), parseInt(req.body.itemQuantity));
         console.log(foundUser);
         foundUser.save();
+        req.flash("success", "You've updated your cart, but we wish you'd really stop browsing our merchandise and throw some moolah this way.")
         res.redirect("/cart");
       }
     })
@@ -110,10 +126,12 @@ router.put("/cart", function(req,res){
     console.log("itemQuantity" + req.body.itemQuantity);
     SessionCart.find({sessionid: req.sessionID}, function(err, foundCart){
       if(err){
-        console.log(err);
+        req.flash("error", err.message);
+        res.redirect("/cart")
       } else{
         foundCart[0].quantity.set(parseInt(req.body.itemIndex), parseInt(req.body.itemQuantity));
         foundCart[0].save();
+        req.flash("success", "You've updated your cart. It's time to update your life. :)")
         res.redirect("/cart");
       }
     })
@@ -126,25 +144,28 @@ router.delete("/cart", function(req,res){
     console.log(req.body.itemIndex);
     User.findById(req.user._id, function(err, foundUser){
       if(err){
-        console.log(err);
+        req.flash("error", err.message);
+        res.redirect("/cart")
       } else{
         let index = parseInt(req.body.itemIndex);
         foundUser.cart = removeItemFromCart(foundUser.cart, index);
         foundUser.quantity = removeItemFromCart(foundUser.quantity, index);
         foundUser.save();
+        req.flash("success", "Successfully removed item from cart. There is now a void.")
         res.redirect("/cart");
       }
     })
   } else{
-    console.log("removing from sessionCart")
     SessionCart.find({sessionid: req.sessionID}, function(err, foundCart){
       if(err){
-        console.log(err);
+        req.flash("error", err.message);
+        res.redirect("/cart")
       } else{
         let index = parseInt(req.body.itemIndex);
         foundCart[0].items = removeItemFromCart(foundCart[0].items, index);
         foundCart[0].quantity = removeItemFromCart(foundCart[0].quantity, index);
         foundCart[0].save();
+        req.flash("success", "Successfully removed item from cart. Whatever you're not satisfied with, we can change!")
         res.redirect("/cart");
       }
     })

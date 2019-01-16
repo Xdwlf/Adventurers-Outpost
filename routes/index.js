@@ -20,9 +20,11 @@ router.post("/", function(req,res){
   })
   User.register(newUser, req.body.password, function(err,user){
     if(err){
+      req.flash("error", err.message);
       res.redirect("/register");
     }
     passport.authenticate("local")(req,res,function(){
+      req.flash("success", "Welcome to the Adventurer's Outpost, " + user.username+ ". We have items for creatures of any alignment!");
       res.redirect("/products");
     })
   })
@@ -42,6 +44,7 @@ router.post("/login", passport.authenticate("local", {
 
 router.get("/logout", function(req,res){
   req.logout();
+  req.flash("success", "Fare thee well!! You have been logged out.")
   res.redirect("/products");
 })
 

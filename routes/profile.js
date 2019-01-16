@@ -7,30 +7,35 @@ router.get("/", function(req,res){
   res.render("profile/profile")
 })
 
+//shows wishlist
 router.get("/wishlist", function(req,res){
   User.findById(req.user._id).populate("wishlist").exec(function(err, foundUser){
     if(err){
-      console.log(err)
+      req.flash("error", err.message);
+      res.redirect("/profile");
     } else{
       res.render("profile/wishlist", {user: foundUser})
     }
   })
 })
 
+//adds a new item to wishlist
 router.post("/wishlist", function(req,res){
   User.findById(req.user._id, function(err, foundUser){
     if(err){
-      console.log(err)
+      req.flash("error", err.message);
+      res.redirect("/profile")
     } else{
       Product.findById(req.body.product_id, function(err, foundProduct){
         if(err){
-          console.log(err)
+          req.flash("error", err.message);
+          res.redirect("/profile")
         } else{
-          console.log(findItemIndex(foundUser.wishlist, foundProduct))
           if(findItemIndex(foundUser.wishlist, foundProduct)<0){
             foundUser.wishlist.push(foundProduct);
             foundUser.save();
           }
+          req.flash("success", "You've successfully added " + foundProduct.name + " to your wishlist! May all your wishes come true and may our pockets fill with gold.")
           res.redirect("back");
         }
       })
@@ -38,19 +43,23 @@ router.post("/wishlist", function(req,res){
   })
 })
 
+//delete item from wishlist
 router.delete("/wishlist", function(req,res){
   User.findById(req.user._id, function(err, foundUser){
     if(err){
-      console.log(err)
+      req.flash("error", err.message);
+      res.redirect("/profile/wishlist");
     } else{
       Product.findById(req.body.product_id, function(err, foundProduct){
         if(err){
-          console.log(err);
+          req.flash("error", err.message);
+          res.redirect("/profile/wishlist");
         } else{
           var index= findItemIndex(foundUser.wishlist, foundProduct);
           console.log(foundUser.wishlist)
           foundUser.wishlist = removeItemFromCart(foundUser.wishlist, index);
           foundUser.save();
+          req.flash("success", "You've successfully removed "+ foundProduct.name + " from your wishlist. It's a little bit disappointing and we're a little angry.")
           res.redirect("back")
         }
       })

@@ -39,5 +39,16 @@
 <div class="container spacing">
 
 </div>
-<%= currentUser %>
-<%= session.id %>
+
+<div class="ui container">
+  <% if(success && success.length>0){ %>
+    <div class="ui teal inverted segment">
+      <%= success %>
+    </div>
+  <% } %>
+  <% if(error && error.length >0){%>
+    <div class="ui yellow inverted segment">
+      <%= error %>
+    </div>
+  <% } %>
+</div>

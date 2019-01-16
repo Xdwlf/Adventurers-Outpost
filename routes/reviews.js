@@ -16,12 +16,12 @@ router.get("/new", function(req,res){
 router.post("/", function(req,res){
   Product.findById(req.params.id, function(err, foundProduct){
     if(err){
-      console.log(err);
+      req.flash("error", err.message);
       res.redirect("/products");
     } else{
       Review.create(req.body.review, function(err, createdReview){
         if(err){
-          console.log(err);
+          req.flash("error", err.message);
           res.redirect("/products/"+ req.params.id);
         } else{
           createdReview.author.id = req.user._id;
@@ -29,6 +29,7 @@ router.post("/", function(req,res){
           createdReview.save();
           foundProduct.reviews.push(createdReview);
           foundProduct.save();
+          req.flash("success", "Successfully posted review! Telling us your opinion greatly helps us suck out your soul(s).");
           res.redirect("/products/"+ foundProduct._id);
         }
       })
@@ -40,7 +41,7 @@ router.post("/", function(req,res){
 router.get("/:review_id/edit",function(req,res){
   Review.findById(req.params.review_id, function(err, foundReview){
     if(err){
-      console.log(err);
+      req.flash("error", err.message);
       res.redirect("/products/" + req.params.id);
     } else{
       res.render("reviews/edit",{product_id: req.params.id, review:foundReview});
@@ -52,9 +53,10 @@ router.get("/:review_id/edit",function(req,res){
 router.put("/:review_id", function(req,res){
   Review.findByIdAndUpdate(req.params.review_id, req.body.review, function(err, updatedReview){
     if(err){
-      console.log(err);
+      req.flash("error", err.message);
       res.redirect("/products/"+req.params.id);
     } else{
+      req.flash("success", "Successfully updated your review. It better be a good change or we're coming after you.")
       res.redirect("/products/"+req.params.id);
     }
   })
