@@ -27,7 +27,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
 
-// seedDB();
+seedDB();
 
 var store = new MongoDBStore({
   uri: "mongodb://localhost/sample_shop",
@@ -70,6 +70,11 @@ app.use("/products", productRoutes);
 app.use("/products/:id/reviews", reviewRoutes);
 app.use("/profile", profileRoutes);
 app.use(shoppingRoutes);
+
+app.get("*", function(req,res){
+  req.flash("error", "Page not found")
+  res.redirect("/products")
+})
 
 
 app.listen(process.env.PORT || 3000, function(){

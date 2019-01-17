@@ -1,14 +1,15 @@
 var express = require("express"),
     User = require("../models/user"),
     Product = require("../models/product"),
+    middleware = require("../middleware"),
     router = express.Router();
 
-router.get("/", function(req,res){
+router.get("/", middleware.isLoggedIn, function(req,res){
   res.render("profile/profile")
 })
 
 //shows wishlist
-router.get("/wishlist", function(req,res){
+router.get("/wishlist", middleware.isLoggedIn, function(req,res){
   User.findById(req.user._id).populate("wishlist").exec(function(err, foundUser){
     if(err){
       req.flash("error", err.message);
@@ -20,7 +21,7 @@ router.get("/wishlist", function(req,res){
 })
 
 //adds a new item to wishlist
-router.post("/wishlist", function(req,res){
+router.post("/wishlist", middleware.isLoggedIn, function(req,res){
   User.findById(req.user._id, function(err, foundUser){
     if(err){
       req.flash("error", err.message);
@@ -44,7 +45,7 @@ router.post("/wishlist", function(req,res){
 })
 
 //delete item from wishlist
-router.delete("/wishlist", function(req,res){
+router.delete("/wishlist", middleware.isLoggedIn, function(req,res){
   User.findById(req.user._id, function(err, foundUser){
     if(err){
       req.flash("error", err.message);
@@ -67,7 +68,7 @@ router.delete("/wishlist", function(req,res){
   })
 })
 
-router.get("/orders", function(req,res){
+router.get("/orders", middleware.isLoggedIn, function(req,res){
   res.render("profile/orders")
 })
 

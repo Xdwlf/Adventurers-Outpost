@@ -1,5 +1,6 @@
 var express= require("express"),
     Product = require("../models/product"),
+    middleware = require("../middleware"),
     router = express.Router();
 
 
@@ -50,12 +51,12 @@ router.get("/consumables", function(req,res){
 //ROUTES TO ADD NEW PRODUCT TO CATALOG
 
 //RENDERS FORM FOR NEW Product
-router.get("/new", function(req,res){
+router.get("/new", middleware.isAuthorized, function(req,res){
   res.render("products/new");
 });
 
 //posts new product to database
-router.post("/",function(req,res){
+router.post("/", middleware.isAuthorized, function(req,res){
   var newProduct = req.body.product;
   Product.create(newProduct, function(err, newlyCreatedProduct){
     if(err){

@@ -4,6 +4,10 @@ var passportLocalMongoose = require("passport-local-mongoose");
 var userSchema = new mongoose.Schema({
   password: String,
   username: String,
+  isAuthorized: {
+    type: Boolean,
+    default: false
+  },
   wishlist: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product"

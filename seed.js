@@ -99,8 +99,9 @@ var reviews= [{
 ]
 
 var users=[{
-  username: "HubbaWubba",
-  email: "hb@gmail.com"
+  username: "hba",
+  email: "hb@gmail.com",
+  isAuthorized: true
 }]
 
 var password="password";
