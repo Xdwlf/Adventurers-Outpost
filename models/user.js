@@ -17,11 +17,11 @@ var userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product"
   }],
-  quantity: [Number]
-  // orders: [{
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "Order"
-  // }]
+  quantity: [Number],
+  orders: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Order"
+  }]
 })
 
 userSchema.plugin(passportLocalMongoose);

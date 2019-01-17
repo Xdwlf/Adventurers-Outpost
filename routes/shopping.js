@@ -1,8 +1,8 @@
 var express= require("express"),
-  Cart = require("../models/cart"),
   Product = require("../models/product"),
   User = require("../models/user"),
   SessionCart = require("../models/sessioncart"),
+  Order = require("../models/order"),
   router = express.Router();
 
 //displays user or sessions current shopping cart
@@ -170,6 +170,83 @@ router.delete("/cart", function(req,res){
       }
     })
   }
+})
+
+//submits an order
+router.post("/checkout", function(req,res){
+  if(req.user){
+    User.findById(req.user._id, function(err, foundUser){
+      if(err){
+        req.flash("error", err.message);
+        res.redirect("/cart");
+      } else{
+        if(foundUser.cart.length === 0){
+          req.flash("error", err.message);
+          res.redirect("/cart");
+        }
+        var newOrder = {
+          items: foundUser.cart,
+          quantity: foundUser.quantity,
+          total: req.body.totalAmount,
+          billingAddress: {
+            name: req.body.stripeBillingName,
+            email: req.body.stripeEmail,
+            address: req.body.stripeBillingAddressLine1,
+            city: req.body.stripeBillingAddressCity,
+            zip: req.body.stripeBillingAddressZip,
+            state: req.body.stripeBillingAddressState,
+            country: req.body.stripeBillingAddressCountry
+          }
+        }
+        Order.create(newOrder, function(err, newlyCreatedOrder){
+          if(err){
+            req.flash("error", err.message);
+            res.redirect("/cart");
+          } else{
+            foundUser.orders.push(newlyCreatedOrder);
+            foundUser.save();
+            req.flash("success", "You've successfully placed your order")
+            res.redirect("/cart");
+          }
+        })
+      }
+    })
+  } else{
+    SessionCart.find({sessionid: req.sessionID}, function(err, foundCart){
+      if(err){
+        req.flash("error", err.message);
+        res.redirect("back")
+      } else{
+        var newOrder = {
+          items: foundCart[0].items,
+          quantity: foundCart[0].quantity,
+          total: req.body.totalAmount,
+          billingAddress: {
+            name: req.body.stripeBillingName,
+            email: req.body.stripeEmail,
+            address: req.body.stripeBillingAddressLine1,
+            city: req.body.stripeBillingAddressCity,
+            zip: req.body.stripeBillingAddressZip,
+            state: req.body.stripeBillingAddressState,
+            country: req.body.stripeBillingAddressCountry
+          }
+        }
+        Order.create(newOrder, function(err, newlyCreatedOrder){
+          if(err){
+            req.flash("error", err.message);
+            res.redirect("/cart");
+          } else{
+            foundCart[0].items = [];
+            foundCart[0].quantity = [];
+            foundCart[0].save();
+            req.flash("success", "You've successfully placed your order")
+            res.redirect("/cart");
+          }
+        });
+      }
+    })
+  }
+
 })
 
 //finds index of mongoose item in a mongoose array

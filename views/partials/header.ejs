@@ -22,6 +22,9 @@
     <a href="/products/tech" class="item">Technology</a>
     <a href="/products/consumables" class="item">Consumables</a>
   <div class="right menu">
+    <% if(currentUser && currentUser.isAuthorized){%>
+      <a href="#" class="item">Manage</a>
+    <%}%>
     <% if(!currentUser){ %>
       <a href="/login" class="item">Login</a>
       <a href="/register" class="item">Sign Up!</a>
