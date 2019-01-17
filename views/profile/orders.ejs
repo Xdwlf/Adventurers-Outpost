@@ -18,7 +18,29 @@
     <div class="twelve wide stretched column">
       <div class="ui segment profile">
         <div class="ui header">
-          Your Orders
+          <h2 class="header">Your Orders</h2>
+          <div class="ui items">
+            <% user.orders.forEach(function(order){ %>
+              <div class="ui segment">
+
+                <div class="item">
+                  <div class="content">
+                    <a class="ui header vertical segment" href="/profile/orders/<%=order._id %>">Order # <%=order._id%></a>
+                    <div class="meta">
+                      <span>You ordered this on <%= order.date.toDateString() %></span>
+                    </div>
+                    <div class="description">
+                      <a href="/profile/orders/<%=order._id%>">Order Details</a>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+            <% }) %>
+
+          </div>
+
 
         </div>
       </div>

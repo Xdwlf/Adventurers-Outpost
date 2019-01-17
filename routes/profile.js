@@ -1,6 +1,7 @@
 var express = require("express"),
     User = require("../models/user"),
     Product = require("../models/product"),
+    Order = require("../models/order"),
     middleware = require("../middleware"),
     router = express.Router();
 
@@ -49,12 +50,12 @@ router.delete("/wishlist", middleware.isLoggedIn, function(req,res){
   User.findById(req.user._id, function(err, foundUser){
     if(err){
       req.flash("error", err.message);
-      res.redirect("/profile/wishlist");
+      res.redirect("back");
     } else{
       Product.findById(req.body.product_id, function(err, foundProduct){
         if(err){
           req.flash("error", err.message);
-          res.redirect("/profile/wishlist");
+          res.redirect("back");
         } else{
           var index= findItemIndex(foundUser.wishlist, foundProduct);
           console.log(foundUser.wishlist)
@@ -68,9 +69,30 @@ router.delete("/wishlist", middleware.isLoggedIn, function(req,res){
   })
 })
 
+//show user's orders
 router.get("/orders", middleware.isLoggedIn, function(req,res){
-  res.render("profile/orders")
+  User.findById(req.user._id).populate("orders").populate("items").exec(function(err, foundUser){
+    if(err){
+      req.flash("error", err.message);
+      res.redirect("back")
+    } else{
+      res.render("profile/orders", {user:foundUser})
+    }
+  })
 })
+
+//show specific order info
+router.get("/orders/:order_id", function(req,res){
+  Order.findById(req.params.order_id).populate("items").exec(function(err, foundOrder){
+    if(err){
+      req.flash("error", err.message);
+      res.redirect("back");
+    } else{
+      res.render("profile/show", {order: foundOrder})
+    }
+  })
+})
+
 
 function findItemIndex(array, item){
   for(let i = 0; i< array.length; i++){

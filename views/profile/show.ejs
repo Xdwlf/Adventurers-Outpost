@@ -1,0 +1,71 @@
+<% include ../partials/header %>
+
+<div class="ui container">
+  <div class="ui grid">
+    <div class="four wide column">
+      <div class="ui vertical fluid tabular menu">
+        <a href="/profile" class="item">
+          My Profile
+        </a>
+        <a href="/profile/wishlist" class="item">
+          Wishlist
+        </a>
+        <a href="/profile/orders" class="item active">
+          Your Orders
+        </a>
+      </div>
+    </div>
+    <div class="twelve wide stretched column">
+      <div class="ui segment profile">
+        <div class="ui header">
+          <div class="content">
+            <h2 class="header">Order # <%= order._id %></h2>
+            <div class="description">
+              Order Submitted on <%= order.date.toDateString() %>
+            </div>
+            <div class="description">
+              Purchased by <%= order.billingAddress.name %>
+            </div>
+            <div class="extra">
+              <p>Shipped to <%= order.billingAddress.city %>,
+              <%= order.billingAddress.state%> <%= order.billingAddress.zip%></p>
+            </div>
+          </div>
+
+
+            <div class="ui items">
+              <% order.items.forEach(function(item, index){ %>
+
+                  <div class="item">
+                    <div class="image">
+                      <img src="<%=item.image%>">
+                    </div>
+                    <div class="content">
+                      <a href="/products/<%=item._id%>" class="header"><%=item.name%></a>
+                      <div class="meta">
+                        <span><p><%= item.description %></span>
+                      </div>
+                      <div class="description">
+                        <p>Quantity: <%=order.quantity[index]%></p>
+                      </div>
+
+                    </div>
+                  </div>
+              <% }) %>
+            </div>
+            <div class="ui right floated">
+              <div class="">
+                Total: $ <%=order.total%>
+              </div>
+            </div>
+
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% include ../partials/footer %>
