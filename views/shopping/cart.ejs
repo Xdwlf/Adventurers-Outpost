@@ -1,130 +1,180 @@
 <% include ../partials/header %>
 <% var subtotal = 0 %>
-<div class="ui container">
-  <h1 class="header">
-    <% if(currentUser){ %>
-      <%=user.username%>'s
-    <% } %> Shopping Cart</h1>
-    <% if(currentUser){ %>
-      <div class="ui items">
-        <% user.cart.forEach(function(item, index){ %>
-          <div class="item">
-            <div class="image">
-              <img src="<%= item.image %>">
-            </div>
-            <div class="content">
-              <a class="header"><%= item.name %> </a>
-              <div class="description">
-                <%= item.description %>
-              </div>
-              <div class="price">
-                $ <%= item.price %>
-                <% subtotal += item.price * user.quantity[index] %>
-              </div>
-              <div class="extra">
-                <form class="" action="/cart?_method=PUT" method="POST">
-                  <input type="number" name="itemQuantity" value="<%= user.quantity[index] %>" min="1" max="<%=item.inventory%>">
-                  <input class="display-none" type="text" name="itemIndex" value="<%= index %> "">
-                  <input type="submit" name="" value="Update">
-                </form>
-              </div>
-            </div>
-          </div>
+<div class="ui container top-space">
 
-          <form class="" action="/cart?_method=DELETE" method="POST">
-            <input class="display-none" type="text" name="itemIndex" value="<%= index %> "">
-            <input type="submit" name="" value="Remove">
-          </form>
-        <% }) %>
-      </div>
-    <% } else{
-      if(cart){ %>
-        <div class="ui items">
-          <% cart.items.forEach(function(item, index){ %>
-            <div class="item">
-              <div class="image">
-                <img src="<%= item.image %>">
-              </div>
-              <div class="content">
-                <a class="header"><%= item.name %> </a>
-                <div class="description">
-                  <%= item.description %>
+  <div class="ui grid">
+    <div class="twelve wide column">
+      <h1>Your Shopping Cart</h1>
+        <% if(currentUser && currentUser.quantity.length>0){ %>
+          <div class="ui segment">
+          <div class="ui items">
+            <% user.cart.forEach(function(item, index){ %>
+              <div class="item">
+                <div class="image">
+                  <img src="<%= item.image %>">
                 </div>
-                <div class="price">
-                  $ <%= item.price %>
-                  <% subtotal += item.price * cart.quantity[index] %>
-                </div>
-                <div class="extra">
+                <div class="content">
+                  <a class="header"><%= item.name %> </a>
+                  <div class="description">
+                    <%= item.description %>
+                  </div>
+                  <div class="price">
+                    $ <%= item.price %>
+                    <% subtotal += item.price * user.quantity[index] %>
+                  </div>
                   <div class="extra">
-                    <form class="" action="/cart?_method=PUT" method="POST">
-                      <input type="number" name="itemQuantity" value="<%= cart.quantity[index] %>" min="1" max="<%=item.inventory%>">
+                    <form class="remove-item-form" action="/cart?_method=PUT" method="POST">
+                      <input class="ui small basic button" type="number" name="itemQuantity" value="<%= user.quantity[index] %>" min="1" max="<%=item.inventory%>">
                       <input class="display-none" type="text" name="itemIndex" value="<%= index %> "">
-                      <input type="submit" name="" value="Update">
+                      <input class="ui small basic blue button" type="submit" name="" value="Update">
+                    </form>
+                    <form class="remove-item-form" action="/cart?_method=DELETE" method="POST">
+                      <input class="display-none" type="text" name="itemIndex" value="<%= index %> "">
+                      <input class="ui small basic red button" type="submit" name="" value="Remove">
                     </form>
                   </div>
                 </div>
               </div>
+            <% }) %>
             </div>
-            <form class="" action="/cart?_method=DELETE" method="POST">
-              <input class="display-none" type="text" name="itemIndex" value="<%= index %> "">
-              <input type="submit" name="" value="Remove">
+          </div>
+
+        <% } else{
+          if(cart){ %>
+            <div class="ui segment">
+
+              <div class="ui items">
+                <% cart.items.forEach(function(item, index){ %>
+                  <div class="item">
+                    <div class="image">
+                      <img src="<%= item.image %>">
+                    </div>
+                    <div class="content">
+                      <a class="header"><%= item.name %> </a>
+                      <div class="description">
+                        <%= item.description %>
+                      </div>
+                      <div class="price">
+                        $ <%= item.price %>
+                        <% subtotal += item.price * cart.quantity[index] %>
+                      </div>
+                      <div class="extra">
+                        <div class="extra">
+                          <form class="remove-item-form" action="/cart?_method=PUT" method="POST">
+                            <input class="ui small basic button" type="number" name="itemQuantity" value="<%= cart.quantity[index] %>" min="1" max="<%=item.inventory%>">
+                            <input class="display-none" type="text" name="itemIndex" value="<%= index %> "">
+                            <input class="ui small basic blue button" type="submit" name="" value="Update">
+                          </form>
+                          <form class="remove-item-form" action="/cart?_method=DELETE" method="POST">
+                            <input class="display-none" type="text" name="itemIndex" value="<%= index %> "">
+                            <input class="ui small red basic button" type="submit" name="" value="Remove">
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <%}); %>
+              </div>
+          </div>
+          <% }%>
+
+        <% } %>
+        <% if((currentUser && currentUser.quantity.length == 0) ||
+                (cart !== null && cart.items.length===0) ||
+                (!currentUser && !cart)){%>
+            <div class="ui segment">
+              You have no items in your cart.
+            </div>
+        <!-- User is not logged in but there is a session cart and its length is 0 -->
+        <% } else { %>
+          <div class="ui grid">
+            <div class="right floated left aligned eight wide column">
+              <% var tax = subtotal * 0.0824;
+
+                var shipping= Math.max(5.99, subtotal*0.01);
+                var total = subtotal + tax + shipping;
+              %>
+
+
+              <table class="ui celled table">
+                <tbody>
+                  <tr>
+                    <td><strong>Subtotal: </strong></td>
+                    <td>$ <%= subtotal.toFixed(2) %></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Est. Tax: </strong></td>
+                    <td>$ <%= tax.toFixed(2) %></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Est. Shipping: </strong></td>
+                    <td>$ <%= shipping.toFixed(2) %></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Total: </strong></td>
+                    <td>$ <%= total.toFixed(2) %></td>
+                  </tr>
+                </tbody>
+              </table>
+
+
+              <div class="ui container">
+
+                <div class="display-block top-space">
+                  <form action="/checkout" method="POST">
+                    <input class="display-none" type="text" name="totalAmount" value="<%=total.toFixed(2)%>">
+                    <script
+                      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                      data-key="pk_test_xkdAiECHGLnTHUCfsYu5He3G"
+                      data-amount= "<%=total*100%>"
+                      data-name="Adventurer's Outpost"
+                      data-billing-address="true"
+                      data-zip-code="true"
+                      data-description="Charge"
+                      data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                      data-locale="auto">
+                    </script>
+                  </form>
+                </div>
+              </div>
+
+            </div>
+
+
+          </div>
+
+        <% } %>
+      </div>
+      <div class="four wide column computer only">
+        <div class="ui sticky">
+          <h1 class="ui top-space">Quick Checkout</h1>
+          <div class="ui segment">
+            <div class="description top-space">
+              <strong class="enlarge">Subtotal:</strong> $ <%= subtotal.toFixed(2) %>
+            </div>
+            <form class="top-space" action="/checkout" method="POST">
+              <input class="display-none" type="text" name="totalAmount" value="<%=total.toFixed(2)%>">
+              <script
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_test_xkdAiECHGLnTHUCfsYu5He3G"
+                data-amount= "<%=total*100%>"
+                data-name="Adventurer's Outpost"
+                data-billing-address="true"
+                data-zip-code="true"
+                data-description="Charge"
+                data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                data-locale="auto">
+              </script>
             </form>
-            <%}); %>
-      </div>
-      <% }%>
-
-    <% } %>
-    <% if(currentUser && currentUser.quantity.length == 0){%>
-        <div class="">
-          You have no items in your cart.
-        </div>
-    <!-- User is not logged in but there is a session cart and its length is 0 -->
-    <% } else if(cart !== null && cart.items.length===0){ %>
-      <div class="">
-        You have no items in your cart.
-      </div>
-    <!-- There is no session cart -->
-    <% } else if (!currentUser && !cart){%>
-      <div class="">
-        You have no items in your cart.
-      </div>
-    <% } else { %>
-      <div class="content">
-        <% var tax = subtotal * 0.0824;
-
-          var shipping= Math.max(5.99, subtotal*0.01);
-          var total = subtotal + tax + shipping;
-        %>
-        <div class="">
-          <strong>Subtotal:</strong> $ <%= subtotal.toFixed(2) %>
-        </div>
-        <div class="">
-          <strong>Est. Tax:</strong> $ <%= tax.toFixed(2) %>
-        </div>
-        <div class="">
-          <strong>Est. Shipping:</strong> $ <%= shipping.toFixed(2) %>
-        </div>
-        <div class="">
-          <strong>Total:</strong> $ <span id="total"><%= total.toFixed(2) %></span>
+          </div>
         </div>
       </div>
-      <form action="/checkout" method="POST">
-        <input class="display-none" type="text" name="totalAmount" value="<%=total.toFixed(2)%>">
-        <script
-          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-          data-key="pk_test_xkdAiECHGLnTHUCfsYu5He3G"
-          data-amount= "<%=total*100%>"
-          data-name="SampleShop"
-          data-billing-address="true"
-          data-zip-code="true"
-          data-description="Charge"
-          data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-          data-locale="auto">
-        </script>
-      </form>
-    <% } %>
-
+    </div>
 </div>
 
-
+<script type="text/javascript">
+  $('.ui.sticky')
+  .sticky()
+;
+</script>
 <% include ../partials/footer %>
