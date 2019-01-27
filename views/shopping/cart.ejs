@@ -121,7 +121,7 @@
               <div class="ui container">
 
                 <div class="display-block top-space">
-                  <form action="/checkout" method="POST">
+                  <form id="checkout-button" action="/checkout" method="POST">
                     <input class="display-none" type="text" name="totalAmount" value="<%=total.toFixed(2)%>">
                     <script
                       src="https://checkout.stripe.com/checkout.js" class="stripe-button"
@@ -148,7 +148,7 @@
       <div class="four wide column computer only">
         <div class="ui sticky">
           <h1 class="ui top-space">Quick Checkout</h1>
-          <div class="ui segment">
+          <div class="ui segment" id="subtotal">
             <div class="description top-space">
               <strong class="enlarge">Subtotal:</strong> $ <%= subtotal.toFixed(2) %>
             </div>
