@@ -204,6 +204,8 @@ router.post("/checkout", function(req,res){
             res.redirect("/cart");
           } else{
             foundUser.orders.push(newlyCreatedOrder);
+            foundUser.cart = [];
+            foundUser.quantity = [];
             foundUser.save();
             req.flash("success", "You've successfully placed your order")
             res.redirect("/cart");

@@ -1,27 +1,31 @@
 <% include ../partials/header %>
 
-<div class="ui container">
+<div class="ui container top-space">
   <div class="ui grid">
     <div class="four wide column">
-      <div class="ui vertical fluid tabular menu">
-        <a href="/profile" class="item active">
-          My Profile
-        </a>
-        <a href="/profile/wishlist" class="item">
-          Wishlist
-        </a>
-        <a href="/profile/orders" class="item">
-          Your Orders
-        </a>
+      <div class="ui vertical menu">
+          <a href="/profile" class="active teal item">
+            My Profile
+          </a>
+          <a href="/profile/wishlist" class="item">
+            Wishlist
+          </a>
+          <a href="/profile/orders" class="item">
+            My Orders
+          </a>
       </div>
     </div>
     <div class="twelve wide stretched column">
-      <div class="ui segment profile">
-        <div class="ui header">
+      <div class="ui profile-content segment">
+        <div class="ui header" >
           Your Dashboard
-
+        </div>
+        <hr>
+        <div class="ui content">
+          Here is where you can navigate to see your personal settings.
         </div>
       </div>
+
     </div>
   </div>
 </div>

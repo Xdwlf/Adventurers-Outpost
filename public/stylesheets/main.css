@@ -1,8 +1,14 @@
-
+.top-space{
+  margin-top: 15px;
+}
 
 .ui.fluid.card .blurring.image{
   background: none;
+}
 
+.ui.stackable.inverted.menu{
+  margin-bottom: 1px;
+  border-radius: 0px;
 }
 
 .card .image img, .ui.card .image #image-thumb{
@@ -51,6 +57,84 @@
 
 .display-none{
   display: none;
+}
+
+.slider-image{
+  height:100%;
+  width: 100%;
+  display:block;
+}
+
+.profile-content{
+  min-height: 85vh;
+}
+
+#slider-text{
+  z-index: 3;
+  width: 100%;
+  position: absolute;
+  margin: 13% auto;
+  text-align: center;
+  letter-spacing: 3px;
+  font-size: 1.3rem;
+  color: rgba(255,255,255, 0.9);
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9),
+                5px 5px 8px rgba(0, 0, 0, 0.5)
+}
+
+#slider-holder{
+  height: 90vh;
+  margin: 0;
+  padding: 0;
+  background-color: black;
+}
+
+#slider-image-1{
+  background-image: url("https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1868&q=80");
+  background-size: cover;
+  background-repeat: none;
+  background-position: 50% 50%;
+  float:left;
+  height: 90vh;
+  position: absolute;
+  z-index: 0;
+  opacity: 1;
+  display:block;
+  -webkit-animation: slide1 20s infinite;
+  -moz-animation:    slide1 20s infinite;
+  -o-animation:      slide1 20s infinite;
+  animation:         slide1 20s infinite;
+}
+
+#slider-image-2{
+  background-image: url("https://images.unsplash.com/photo-1505159940484-eb2b9f2588e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80");
+  background-size: cover;
+  background-repeat: none;
+  background-position: 50% 50%;
+  z-index: 1;
+  float: left;
+  opacity: 0;
+  display: block;
+  -webkit-animation: slide2 20s infinite;
+  -moz-animation:    slide2 20s infinite;
+  -o-animation:      slide2 20s infinite;
+  animation:         slide2 20s infinite;
+}
+#slider-image-3{
+  background-image: url("https://images.unsplash.com/photo-1510218830377-2e994ea9087d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1776&q=80");
+  background-size: cover;
+  background-repeat: none;
+  background-position: 50% 50%;
+  position: absolute;
+  height: 90vh;
+  z-index: 2;
+  float: left;
+  opacity: 0;
+  display: block;
+  -webkit-animation: slide3 20s infinite;
+  -moz-animation:    slide3 20s infinite;
+  -o-animation:      slide3 20s infinite;
+  animation:         slide3 20s infinite;
 }
 
 #homepage-background{
@@ -115,4 +199,56 @@
 
 .profile{
   height:70vh
+}
+
+@keyframes slide1{
+  0% {
+    opacity: 1;
+  }
+  17%{
+    opacity: 1;
+  }
+  33%{
+    opacity: 0;
+  }
+  83%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+
+@keyframes slide2{
+  17%{
+    opacity: 0;
+  }
+
+  33%{
+    opacity: 1;
+  }
+
+  50%{
+    opacity: 1;
+  }
+
+  67%{
+    opacity: 0;
+  }
+}
+
+@keyframes slide3{
+
+  50%{
+    opacity: 0;
+  }
+  67%{
+    opacity: 1;
+  }
+  83%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0;
+  }
 }
